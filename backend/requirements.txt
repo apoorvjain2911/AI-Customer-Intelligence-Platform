@@ -3,17 +3,32 @@ uvicorn[standard]>=0.30.0
 
 pandas>=2.2.0
 numpy>=1.26.0
-scikit-learn>=1.5.0
 scipy>=1.13.0
+scikit-learn>=1.5.0
 joblib>=1.4.0
+shap==0.46.0
 
 SQLAlchemy>=2.0.30
-python-multipart>=0.0.9
-python-dotenv>=1.0.1
 psycopg2-binary>=2.9.9
 
+python-multipart>=0.0.9
+python-dotenv>=1.0.1
+
 python-jose[cryptography]>=3.3.0
-passlib[bcrypt]>=1.7.4
+passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
 email-validator>=2.0.0
 
-shap==0.46.0
+pydantic>=2.7.0
+pydantic-settings>=2.3.0
+
+python-dateutil>=2.9.0
+typing-extensions>=4.12.0
+
+requests>=2.32.0
+
+# AI / LLM (keep only if used)
+langchain>=0.3.0
+langchain-community>=0.3.0
+ollama>=0.3.0
+openai>=1.0.0
