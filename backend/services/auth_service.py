@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
+from core.config import ADMIN_EMAIL
 from core.security import (
     hash_password,
     verify_password,
@@ -27,11 +28,18 @@ def register_user(db: Session, user_data: UserRegister) -> User:
 
     hashed_password = hash_password(user_data.password)
 
+    # Automatically assign admin role
+    role = (
+        "admin"
+        if ADMIN_EMAIL and user_data.email.lower() == ADMIN_EMAIL
+        else "sales_manager"
+    )
+
     new_user = User(
         name=user_data.name,
         email=user_data.email,
         hashed_password=hashed_password,
-        role="sales_manager",
+        role=role,
     )
 
     db.add(new_user)
