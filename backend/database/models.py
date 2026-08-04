@@ -7,6 +7,12 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from .db import Base
 
+# Import ORM models so SQLAlchemy registers them before create_all runs.
+from models.customer import Customer  # noqa: F401
+from models.segment import Segment  # noqa: F401
+from models.report import Report  # noqa: F401
+from models.user import User  # noqa: F401
+
 
 class Prediction(Base):
     __tablename__ = "predictions"
