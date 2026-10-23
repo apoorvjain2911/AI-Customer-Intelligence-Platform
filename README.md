@@ -5,8 +5,8 @@ A full-stack CRM and customer analytics platform that predicts customer churn wi
 | | |
 |---|---|
 | **Frontend (live)** | https://churn-prediction-roan.vercel.app |
-| **Backend API (live)** | `TODO: paste your Render URL, e.g. https://your-api.onrender.com` |
-| **API docs (live)** | `<backend URL>/docs` |
+| **Backend API (live)** | https://churn-prediction-0v3d.onrender.com |
+| **API docs (live)** | https://churn-prediction-0v3d.onrender.com/docs |
 | **Stack** | React · FastAPI · Scikit-learn · SHAP · SQLAlchemy |
 
 > The project began as a churn prediction dashboard and grew into a complete CRM with authentication, role-based access, analytics and an admin panel.
