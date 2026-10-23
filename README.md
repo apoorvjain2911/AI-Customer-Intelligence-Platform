@@ -333,6 +333,6 @@ Interactive documentation is available at `/docs` (Swagger UI).
 
 ## Author
 
-**Apoorv Jain**, B.Tech Mechanical Engineering, MANIT Bhopal
+**Apoorv Jain**, MANIT Bhopal
 AI · Machine Learning · Full-Stack Development
 [GitHub](https://github.com/apoorvjain2911) · [LinkedIn](https://linkedin.com/in/apoorv-jain)
