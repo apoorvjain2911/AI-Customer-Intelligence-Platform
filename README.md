@@ -1,351 +1,181 @@
 # AI Customer Intelligence Platform
 
-A full-stack AI-powered Customer Intelligence Platform that helps businesses predict customer churn, manage customer relationships, analyze customer lifetime value, explain AI predictions, and generate actionable business insights.
+A full-stack CRM and customer analytics platform that predicts customer churn with machine learning, explains each prediction with SHAP, and turns the results into customer segments, lifetime-value analysis and retention recommendations.
 
-## Live Demo
+**Live demo:** [churn-prediction-roan.vercel.app](https://churn-prediction-roan.vercel.app) (frontend on Vercel, API on Render)
+**Stack:** React · FastAPI · Scikit-learn · SHAP · SQLAlchemy
 
-**Frontend:** https://churn-prediction-roan.vercel.app
-
----
-
-# Overview
-
-This project started as a Customer Churn Prediction Dashboard and has evolved into a complete AI-powered CRM & Customer Intelligence Platform.
-
-The application enables organizations to:
-
-- Manage customers
-- Predict customer churn using Machine Learning
-- Explain predictions using SHAP Explainable AI
-- Analyze Customer Lifetime Value (CLV)
-- Generate business reports
-- Segment customers
-- Manage users with Role-Based Access Control
-- Monitor analytics through an interactive dashboard
-
-Built using **React + FastAPI + Scikit-Learn**.
+> The project began as a churn prediction dashboard and grew into a complete CRM with authentication, role-based access, analytics and an admin panel.
 
 ---
 
-# Features
+## Features
 
-## Authentication & Security
+| Area | What it does |
+|---|---|
+| **Authentication & security** | JWT authentication, registration and login, bcrypt password hashing, protected routes, role-based access control (Admin and Sales Manager) |
+| **Customer management** | Create, update, delete, search, filter and sort customers; customer detail view |
+| **Churn prediction** | Random Forest model with a churn probability, Low / Medium / High risk classification, batch prediction and prediction history |
+| **Explainable AI (SHAP)** | Global feature importance, per-customer explanations, churn drivers and retention recommendations |
+| **Customer lifetime value** | CLV calculation, top valuable customers, customer value analysis |
+| **Segmentation** | Create segments, assign customers, view segment statistics |
+| **Reports** | Create, view, update and delete reports |
+| **Admin panel** | User management, role changes, activate/deactivate users, model status, model retraining |
+| **Analytics dashboard** | Customer overview, churn statistics, risk distribution, feature importance, prediction analytics |
 
-- JWT Authentication
-- Secure Login & Registration
-- Password Hashing (bcrypt)
-- Protected Routes
-- Role-Based Access Control (RBAC)
-- Admin & Sales Manager Roles
+## Tech Stack
 
----
+| Layer | Technologies |
+|---|---|
+| Frontend | React 19, Vite, Tailwind CSS, Axios |
+| Backend | Python, FastAPI, SQLAlchemy, Passlib (bcrypt), JWT |
+| ML / data | Scikit-learn, SHAP, Pandas, NumPy, Joblib |
+| Database | SQLite for development; PostgreSQL-compatible through SQLAlchemy |
+| Deployment | Vercel (frontend), Render (backend) |
 
-## Customer Management
+## Architecture
 
-- Add Customer
-- Update Customer
-- Delete Customer
-- Customer Search
-- Customer Details
-- Customer Filtering
-- Customer Sorting
+```
+React (Vite)  ──HTTPS/JSON──►  FastAPI  ──►  Services  ──►  SQLAlchemy ──► Database
+                                  │              │
+                               Schemas        ML model (Joblib)
+                             (validation)     + SHAP explainer
+```
 
----
+Requests are validated by Pydantic schemas, handled by routers in `api/`, passed to business logic in `services/`, and persisted through SQLAlchemy models. The trained model is stored with Joblib and loaded by the prediction and explainability services.
 
-## AI Churn Prediction
-
-- Random Forest Churn Prediction
-- Probability Score
-- Risk Classification
-  - Low
-  - Medium
-  - High
-- Batch Prediction
-- Prediction History
-
----
-
-## Explainable AI (SHAP)
-
-- SHAP Feature Importance
-- Customer-specific AI Explanation
-- Business Explanation
-- Churn Drivers
-- AI-powered Retention Recommendations
-
----
-
-## Customer Lifetime Value (CLV)
-
-- CLV Calculation
-- Top Valuable Customers
-- Customer Value Analysis
-
----
-
-## Reports
-
-- Report Management
-- Create Reports
-- Update Reports
-- Delete Reports
-
----
-
-## Customer Segmentation
-
-- Customer Segments
-- Segment Assignment
-- Segment Statistics
-
----
-
-## Admin Dashboard
-
-- User Management
-- Change User Roles
-- Activate/Deactivate Users
-- Model Status
-- Model Retraining
-
----
-
-## Analytics Dashboard
-
-- Customer Overview
-- Churn Statistics
-- Risk Distribution
-- Feature Importance
-- Prediction Analytics
-
----
-
-# Tech Stack
-
-## Frontend
-
-- React 19
-- Vite
-- Tailwind CSS
-- Axios
-
----
-
-## Backend
-
-- FastAPI
-- Python
-- Scikit-Learn
-- SHAP
-- Pandas
-- NumPy
-- SQLAlchemy
-- Joblib
-- Passlib
-- JWT Authentication
-
----
-
-## Database
-
-- SQLite (Development)
-- PostgreSQL Compatible
-
----
-
-## Deployment
-
-- Vercel
-- Render
-
----
-
-# Project Structure
+## Project Structure
 
 ```
 backend/
-│
-├── api/
-├── services/
-├── models/
-├── schemas/
-├── database/
-├── core/
+├── api/          # route handlers
+├── services/     # business logic, ML and SHAP
+├── models/       # SQLAlchemy models
+├── schemas/      # Pydantic request/response schemas
+├── database/     # engine and session setup
+├── core/         # config, security, JWT
 └── main.py
 
 frontend/
-│
 ├── components/
 ├── pages/
 ├── context/
-├── services/
+├── services/     # Axios API clients
 └── App.jsx
 ```
 
----
+## Getting Started
 
-# Getting Started
+### Prerequisites
+Python 3.10+ and Node.js 18+.
 
-## Backend
+### Backend
 
 ```bash
 cd backend
-
+python -m venv venv
+source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-
 uvicorn main:app --reload
 ```
 
----
+The API runs at `http://localhost:8000`, with interactive documentation at `http://localhost:8000/docs`.
 
-## Frontend
+### Frontend
 
 ```bash
 cd frontend
-
 npm install
-
 npm run dev
 ```
 
----
+The app runs at `http://localhost:5173`.
 
-# Environment Variables
+### Environment variables
 
-## Backend
+**Backend** (`backend/.env`)
 
-```env
+```
 DATABASE_URL=sqlite:///./app.db
-
 FRONTEND_URL=http://localhost:5173
-
 CORS_ORIGINS=http://localhost:5173
+SECRET_KEY=change-me          # used to sign JWTs
 ```
 
----
+**Frontend** (`frontend/.env`)
 
-## Frontend
-
-```env
+```
 VITE_API_BASE_URL=http://localhost:8000
 ```
 
----
+> TODO: confirm the JWT variable names (`SECRET_KEY`, algorithm, token expiry) match `core/` in your code, and add any others the backend reads.
 
-# API Modules
+## API Overview
 
-### Authentication
+Full interactive documentation is available at `/docs` (Swagger UI).
 
-- POST /auth/register
-- POST /auth/login
-- GET /auth/me
+| Module | Endpoints |
+|---|---|
+| Authentication | `POST /auth/register`, `POST /auth/login`, `GET /auth/me` |
+| Customers | `GET /customers`, `POST /customers`, `PUT /customers/{id}`, `DELETE /customers/{id}` |
+| Dashboard | `GET /dashboard/summary` |
+| Prediction | `POST /predict`, `POST /predict/batch` |
+| Upload | `POST /upload` |
+| Training | `POST /train` |
+| Explainability | `GET /xai/customers/{id}` |
+| Customer lifetime value | `GET /clv/summary`, `GET /clv/top`, `POST /clv/refresh/{id}` |
+| Reports | CRUD endpoints |
+| Segments | CRUD endpoints and customer assignment |
+| Admin | Dashboard, user management, role management, status management, model retraining |
 
----
+> TODO: replace the "CRUD endpoints" rows with the exact routes from `/docs` so the endpoint count in this README matches your resume's "35+ REST APIs".
 
-### Customers
+## Machine Learning
 
-- GET /customers
-- POST /customers
-- PUT /customers/{id}
-- DELETE /customers/{id}
+- **Model:** Random Forest classifier trained on customer attributes, served through `POST /predict`.
+- **Risk levels:** probability thresholds map each customer to Low, Medium or High risk.
+- **Explainability:** SHAP values give both global feature importance and a per-customer breakdown of what pushed the prediction up or down.
+- **Retraining:** admins can retrain the model through `POST /train`.
 
----
+> TODO: add your real test-set results here, for example accuracy, precision, recall, F1 and ROC-AUC, along with the dataset name, its size and how it was split. Real figures are more convincing than any claim.
 
-### Dashboard
+## Testing
 
-- GET /dashboard/summary
+> TODO: describe how to run your tests (for example `pytest`) and what they cover, or add a few tests for authentication, validation and prediction endpoints.
 
----
+## Deployment
 
-### Prediction
+- **Frontend:** Vercel, with `VITE_API_BASE_URL` pointing at the deployed API.
+- **Backend:** Render, with the environment variables above.
+- **Note:** SQLite files are lost when a Render instance restarts. For persistent data, use a hosted PostgreSQL database and set `DATABASE_URL` accordingly.
 
-- POST /predict
-- POST /predict/batch
+## Current Limitations
 
----
+- Development database is SQLite; PostgreSQL has not been used in production yet.
+- No Docker or CI/CD setup yet.
+- Model versioning is not implemented.
 
-### Upload
+## Roadmap
 
-- POST /upload
+- LLM-based AI copilot for customer insights
+- PDF report generation
+- Email automation and real-time notifications
+- Customer activity timeline
+- Docker support and a CI/CD pipeline
+- PostgreSQL in production
+- Model versioning
+- Multi-tenant support
 
----
+## Screenshots
 
-### Training
+> TODO: add images to a `docs/screenshots/` folder and link them here: dashboard, customer management, SHAP explanation, admin panel, reports, segments, login.
 
-- POST /train
+```markdown
+![Dashboard](docs/screenshots/dashboard.png)
+```
 
----
+## Author
 
-### SHAP Explainability
-
-- GET /xai/customers/{id}
-
----
-
-### Customer Lifetime Value
-
-- GET /clv/summary
-- GET /clv/top
-- POST /clv/refresh/{id}
-
----
-
-### Reports
-
-- CRUD APIs
-
----
-
-### Segments
-
-- CRUD APIs
-- Customer Assignment
-
----
-
-### Admin
-
-- Dashboard
-- User Management
-- Role Management
-- Status Management
-- Model Retraining
-
----
-
-# Future Improvements
-
-- AI Copilot (LLM Integration)
-- PDF Report Generation
-- Email Automation
-- Real-time Notifications
-- Customer Timeline
-- Docker Support
-- CI/CD Pipeline
-- PostgreSQL Production Database
-- Model Versioning
-- Multi-Tenant Support
-
----
-
-# Screenshots
-
-Add screenshots of:
-
-- Dashboard
-- Customer Management
-- SHAP Explanation
-- Admin Panel
-- Reports
-- Segments
-- Login Page
-
----
-
-# Author
-
-**Apoorv Jain**
-
-Mechanical Engineering | MANIT Bhopal
-
-AI • Machine Learning • Full Stack Development
+**Apoorv Jain**, B.Tech Mechanical Engineering, MANIT Bhopal
+AI · Machine Learning · Full-Stack Development
+[GitHub](https://github.com/apoorvjain2911) · [LinkedIn](https://linkedin.com/in/apoorv-jain)
